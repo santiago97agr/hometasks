@@ -3,39 +3,32 @@ import { NextResponse } from 'next/server'
 
 export default withAuth(
   function middleware(req) {
-    // Siempre devolver una respuesta válida
+    const { pathname } = req.nextUrl
+
+    // 🔓 Permitir rutas públicas sin sesión
+    if (
+      pathname.startsWith('/api/auth') ||
+      pathname === '/login' ||
+      pathname === '/register' ||
+      pathname === '/' ||
+      pathname.startsWith('/api/health')
+    ) {
+      return NextResponse.next()
+    }
+
+    // 🔒 Si no hay sesión, redirigir a login
+    if (!req.nextauth?.token) {
+      const loginUrl = new URL('/login', req.url)
+      return NextResponse.redirect(loginUrl)
+    }
+
+    // ✅ Si hay sesión, seguir
     return NextResponse.next()
-  },
-  {
-    callbacks: {
-      authorized: ({ token, req }) => {
-        const { pathname } = req.nextUrl
-
-        // ✅ Rutas públicas
-        if (
-          pathname.startsWith('/api/auth') ||
-          pathname.startsWith('/login') ||
-          pathname.startsWith('/register') ||
-          pathname.startsWith('/api/health') ||
-          pathname === '/'
-        ) {
-          return true
-        }
-
-        // ✅ Requiere sesión
-        return !!token
-      }
-    },
-    // ✅ Si no está autorizado -> redirigir al login
-    pages: {
-      signIn: '/login',
-    },
   }
 )
 
 export const config = {
   matcher: [
-    // Aplica a todo excepto assets y favicon
     '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 }
