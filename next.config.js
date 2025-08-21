@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverExternalPackages: ['@libsql/client'],
+  serverExternalPackages: ['@libsql/client']
 }
 
 module.exports = nextConfig

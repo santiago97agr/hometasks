@@ -1,12 +1,21 @@
 {
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/areas/[id]/route": "app/api/areas/[id]/route.js",
   "/api/areas/route": "app/api/areas/route.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/auth/register/route": "app/api/auth/register/route.js",
+  "/api/tasks/[id]/complete/route": "app/api/tasks/[id]/complete/route.js",
+  "/api/dashboard/route": "app/api/dashboard/route.js",
   "/api/tasks/[id]/route": "app/api/tasks/[id]/route.js",
   "/api/tasks/route": "app/api/tasks/route.js",
-  "/api/dashboard/route": "app/api/dashboard/route.js",
-  "/dashboard/page": "app/dashboard/page.js",
   "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/dashboard/tasks/page": "app/dashboard/tasks/page.js",
+  "/(auth)/register/page": "app/(auth)/register/page.js",
+  "/dashboard/areas/[id]/edit/page": "app/dashboard/areas/[id]/edit/page.js",
+  "/dashboard/areas/new/page": "app/dashboard/areas/new/page.js",
+  "/dashboard/areas/page": "app/dashboard/areas/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
   "/dashboard/tasks/[id]/edit/page": "app/dashboard/tasks/[id]/edit/page.js",
-  "/dashboard/tasks/new/page": "app/dashboard/tasks/new/page.js"
+  "/dashboard/tasks/new/page": "app/dashboard/tasks/new/page.js",
+  "/dashboard/tasks/page": "app/dashboard/tasks/page.js",
+  "/page": "app/page.js"
 }
