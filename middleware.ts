@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 
 export default withAuth(
   function middleware(req) {
-    // Middleware funcionando correctamente
+    // Siempre devolver una respuesta válida
     return NextResponse.next()
   },
   {
@@ -11,7 +11,7 @@ export default withAuth(
       authorized: ({ token, req }) => {
         const { pathname } = req.nextUrl
 
-        // Rutas públicas
+        // ✅ Rutas públicas
         if (
           pathname.startsWith('/api/auth') ||
           pathname.startsWith('/login') ||
@@ -22,11 +22,11 @@ export default withAuth(
           return true
         }
 
-        // Requerir autenticación
+        // ✅ Requiere sesión
         return !!token
       }
     },
-    // 👇 importante: define dónde redirigir si no está autorizado
+    // ✅ Si no está autorizado -> redirigir al login
     pages: {
       signIn: '/login',
     },
@@ -35,6 +35,7 @@ export default withAuth(
 
 export const config = {
   matcher: [
+    // Aplica a todo excepto assets y favicon
     '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 }
