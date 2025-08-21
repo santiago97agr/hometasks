@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -8,13 +8,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 
-export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+// Componente separado para manejar searchParams
+function LoginMessages() {
   const [successMessage, setSuccessMessage] = useState('')
-  const router = useRouter()
   const searchParams = useSearchParams()
 
   useEffect(() => {
@@ -22,6 +18,22 @@ export default function LoginPage() {
       setSuccessMessage('¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.')
     }
   }, [searchParams])
+
+  if (!successMessage) return null
+
+  return (
+    <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+      {successMessage}
+    </div>
+  )
+}
+
+function LoginForm() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -58,11 +70,9 @@ export default function LoginPage() {
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
-            {successMessage && (
-              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
-                {successMessage}
-              </div>
-            )}
+            <Suspense fallback={null}>
+              <LoginMessages />
+            </Suspense>
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
                 {error}
@@ -110,4 +120,8 @@ export default function LoginPage() {
       </Card>
     </div>
   )
+}
+
+export default function LoginPage() {
+  return <LoginForm />
 }
