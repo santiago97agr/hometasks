@@ -1,8 +1,6 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
-import { db } from '@/lib/db';
-import { users } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 
 export const authOptions: NextAuthOptions = {
@@ -19,6 +17,10 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
+          // Import db dynamically to avoid issues during build
+          const { db } = await import('@/lib/db');
+          const { users } = await import('@/lib/db/schema');
+          
           const user = await db
             .select()
             .from(users)

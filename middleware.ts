@@ -1,20 +1,41 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { withAuth } from 'next-auth/middleware'
 
-export function middleware(request: NextRequest) {
-  // Permitir todas las rutas por ahora para debug
-  return NextResponse.next()
-}
+export default withAuth(
+  function middleware(req) {
+    // Middleware funcionando correctamente
+    return
+  },
+  {
+    callbacks: {
+      authorized: ({ token, req }) => {
+        const { pathname } = req.nextUrl
+        
+        // Permitir acceso a rutas públicas
+        if (
+          pathname.startsWith('/api/auth') ||
+          pathname.startsWith('/login') ||
+          pathname.startsWith('/register') ||
+          pathname.startsWith('/api/health') ||
+          pathname === '/'
+        ) {
+          return true
+        }
+        
+        // Requerir autenticación para rutas protegidas
+        return !!token
+      }
+    },
+  }
+)
 
 export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
-     * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+    '/((?!_next/static|_next/image|favicon.ico).*)',
+  ]
 }
